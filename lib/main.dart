@@ -1,4 +1,5 @@
 // main.dart
+import 'package:alaqsa_visitor_guide/screens/map_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'screens/home_screen.dart';
@@ -15,7 +16,7 @@ void main() {
     DeviceOrientation.portraitDown,
   ]);
   // Set system UI overlay style for status bar
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.light,
   ));
@@ -29,15 +30,15 @@ class AlAqsaApp extends StatelessWidget {
       title: 'Al-Aqsa Mosque Visitor Guide',
       debugShowCheckedModeBanner: false, // Remove debug banner
       theme: ThemeData(
-        primaryColor: Color(0xFF2C7D56),
-        scaffoldBackgroundColor: Color(0xFFF8F4E3),
-        colorScheme: ColorScheme.light(
+        primaryColor: const Color(0xFF2C7D56),
+        scaffoldBackgroundColor: const Color(0xFFF8F4E3),
+        colorScheme: const ColorScheme.light(
           primary: Color(0xFF2C7D56),
           secondary: Color(0xFFD4AF37),
           background: Color(0xFFF8F4E3),
         ),
         fontFamily: 'Segoe UI',
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           headlineLarge: TextStyle(
             color: Color(0xFF2C7D56),
             fontWeight: FontWeight.bold,
@@ -59,9 +60,9 @@ class AlAqsaApp extends StatelessWidget {
         // Add elevated button theme for consistent button styling
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xFF2C7D56),
+            backgroundColor: const Color(0xFF2C7D56),
             foregroundColor: Colors.white,
-            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -84,7 +85,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     HomeScreen(),
     ToursScreen(),
-    HighlightsScreen(),
+    MapScreen(),
     InfoScreen(),
     SettingsScreen(),
   ];
@@ -95,7 +96,7 @@ class _MainScreenState extends State<MainScreen> {
       // Added SafeArea for proper handling of notches and cutouts
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'Al-Aqsa Mosque Guide',
             style: TextStyle(
               fontSize: 18, // Smaller text for better fit on small devices
@@ -108,21 +109,21 @@ class _MainScreenState extends State<MainScreen> {
           actions: [
             // Add a help button in the app bar
             IconButton(
-              icon: Icon(Icons.help_outline),
+              icon: const Icon(Icons.help_outline),
               onPressed: () {
                 // Show help dialog
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Help'),
-                      content: SingleChildScrollView(
+                      title: const Text('Help'),
+                      content: const SingleChildScrollView(
                         child: Text(
                             'Welcome to the Al-Aqsa Mosque Visitor Guide. Navigate through the app using the bottom navigation bar.'),
                       ),
                       actions: [
                         TextButton(
-                          child: Text('Close'),
+                          child: const Text('Close'),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -137,7 +138,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
         body: _screens[_selectedIndex],
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             boxShadow: [
               BoxShadow(
                 color: Colors.black12,
@@ -160,7 +161,7 @@ class _MainScreenState extends State<MainScreen> {
                 _selectedIndex = index;
               });
             },
-            items: [
+            items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
                 label: 'Home',
@@ -170,8 +171,8 @@ class _MainScreenState extends State<MainScreen> {
                 label: 'Tours',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.star),
-                label: 'Highlights',
+                icon: Icon(Icons.map),
+                label: 'Map',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.info),

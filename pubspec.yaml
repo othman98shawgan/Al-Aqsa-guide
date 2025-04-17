@@ -29,4 +29,3 @@ flutter:
   # Add asset configuration for better mobile experience
   assets:
     - assets/images/
-    - assets/icons/
