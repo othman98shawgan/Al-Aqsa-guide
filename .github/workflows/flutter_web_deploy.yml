@@ -1,14 +1,16 @@
-name: Deploy Flutter Web to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches:
-      - develop  # or 'develop' if you prefer
+      - develop  # 👈 trigger on develop
+  workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
@@ -16,16 +18,16 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.13.0' # or whatever version you're using
+          flutter-version: 3.13.0
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build web
-        run: flutter build web --release --no-tree-shake-icons
+      - name: Build Flutter Web
+        run: flutter build web --release --no-tree-shake-icons --base-href "/Al-Aqsa-guide/"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          personal_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/web
