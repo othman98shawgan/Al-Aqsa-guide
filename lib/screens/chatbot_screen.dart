@@ -1,39 +1,15 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class ChatBotScreen extends StatelessWidget {
+class ChatBotScreen extends StatefulWidget {
   const ChatBotScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    if (kIsWeb) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Chatbot')),
-        body: const Center(
-          child: Text(
-            '🛑 The Chatbot is currently only available in the mobile app.',
-            style: TextStyle(fontSize: 16),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    }
-
-    return const ChatBotMobile();
-  }
+  State<ChatBotScreen> createState() => _ChatBotScreenState();
 }
 
-class ChatBotMobile extends StatefulWidget {
-  const ChatBotMobile({super.key});
-
-  @override
-  State<ChatBotMobile> createState() => _ChatBotMobileState();
-}
-
-class _ChatBotMobileState extends State<ChatBotMobile> {
+class _ChatBotScreenState extends State<ChatBotScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _controller = TextEditingController();
   final List<Map<String, String>> _messages = [];
@@ -56,7 +32,6 @@ class _ChatBotMobileState extends State<ChatBotMobile> {
       _isLoading = true;
     });
 
-    // Scroll to user's message
     await Future.delayed(const Duration(milliseconds: 100));
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
@@ -65,54 +40,30 @@ class _ChatBotMobileState extends State<ChatBotMobile> {
     );
 
     try {
-      final response = await _askOpenAI(text);
-      setState(() {
-        _messages.add({'role': 'bot', 'text': response});
-      });
+      final response = await http.post(
+        Uri.parse('https://chatbot-vkltqnycea-uc.a.run.app'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'question': text}),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          _messages.add({'role': 'bot', 'text': data['answer'] ?? 'No answer received.'});
+        });
+      } else {
+        setState(() {
+          _messages.add({'role': 'bot', 'text': 'Failed to get a response from the server.'});
+        });
+      }
     } catch (e) {
       setState(() {
-        _messages.add({'role': 'bot', 'text': 'Sorry, I couldn\'t get an answer. Please try again later.'});
+        _messages.add({'role': 'bot', 'text': 'An error occurred. Please try again.'});
       });
     } finally {
       setState(() {
         _isLoading = false;
       });
-    }
-  }
-
-  Future<String> _askOpenAI(String question) async {
-    final apiKey = dotenv.env['OPENAI_API_KEY'];
-    const endpoint = 'https://api.openai.com/v1/chat/completions';
-
-    if (apiKey == null || apiKey.isEmpty) {
-      throw Exception('OpenAI API key not found in .env');
-    }
-
-    final response = await http.post(
-      Uri.parse(endpoint),
-      headers: {
-        'Authorization': 'Bearer $apiKey',
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-        'model': 'gpt-3.5-turbo',
-        'messages': [
-          {
-            'role': 'system',
-            'content':
-                'You are a helpful and knowledgeable guide about Al-Aqsa Mosque. Provide answers from an Islamic perspective based on authentic Islamic tradition, history, and scholarly sources. Be respectful, concise, and avoid speculation.'
-          },
-          {'role': 'user', 'content': question},
-        ]
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return data['choices'][0]['message']['content'].toString().trim();
-    } else {
-      final error = jsonDecode(response.body);
-      throw Exception('OpenAI error: ${error['error']['message']}');
     }
   }
 
