@@ -13,6 +13,7 @@ class LandmarkDialog extends StatelessWidget {
       titlePadding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
       title: Text(
         landmark.name,
+        textAlign: TextAlign.center,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
       ),
       content: Column(
@@ -31,10 +32,13 @@ class LandmarkDialog extends StatelessWidget {
       ),
       actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        IconButton(
-          onPressed: () => Navigator.of(context).pop(),
-          icon: Icon(Icons.close, color: Colors.grey),
-          tooltip: 'Close',
+        Focus(
+          autofocus: false,
+          child: IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: Icon(Icons.close),
+            tooltip: 'Close',
+          ),
         ),
         ElevatedButton(
           onPressed: () => Navigator.of(context).pop(true),

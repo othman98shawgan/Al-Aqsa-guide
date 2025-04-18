@@ -75,23 +75,84 @@ class MapScreen extends StatelessWidget {
                   double x = (lm.left / mapWidth) * constraints.maxWidth;
                   double y = (lm.top / mapHeight) * constraints.maxHeight;
 
-                  return Positioned(
+                  return AnimatedMarker(
                     top: y,
                     left: x,
-                    child: GestureDetector(
-                      onTap: () => _openLandmarkDialog(context, lm),
-                      child: Icon(
-                        Icons.location_on,
-                        color: _getColorByType(lm.type ?? ''),
-                        size: 32,
-                      ),
-                    ),
+                    color: _getColorByType(lm.type ?? ''),
+                    onTap: () => _openLandmarkDialog(context, lm),
                   );
                 }),
               ],
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class AnimatedMarker extends StatefulWidget {
+  final double top;
+  final double left;
+  final Color color;
+  final VoidCallback onTap;
+
+  const AnimatedMarker({
+    Key? key,
+    required this.top,
+    required this.left,
+    required this.color,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  State<AnimatedMarker> createState() => _AnimatedMarkerState();
+}
+
+class _AnimatedMarkerState extends State<AnimatedMarker> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: Duration(milliseconds: 150),
+      vsync: this,
+      lowerBound: 0.8,
+      upperBound: 1.0,
+    );
+    _scale = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+    _controller.value = 1.0;
+  }
+
+  void _handleTap() async {
+    await _controller.reverse();
+    await _controller.forward();
+    widget.onTap();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: widget.top,
+      left: widget.left,
+      child: GestureDetector(
+        onTap: _handleTap,
+        child: ScaleTransition(
+          scale: _scale,
+          child: Icon(
+            Icons.location_on,
+            color: widget.color,
+            size: 32,
+          ),
+        ),
       ),
     );
   }
