@@ -1,27 +1,50 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class ChatBotScreen extends StatefulWidget {
+class ChatBotScreen extends StatelessWidget {
   const ChatBotScreen({super.key});
 
   @override
-  State<ChatBotScreen> createState() => _ChatBotScreenState();
+  Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Chatbot')),
+        body: const Center(
+          child: Text(
+            '🛑 The Chatbot is currently only available in the mobile app.',
+            style: TextStyle(fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+
+    return const ChatBotMobile();
+  }
 }
 
-class _ChatBotScreenState extends State<ChatBotScreen> {
+class ChatBotMobile extends StatefulWidget {
+  const ChatBotMobile({super.key});
+
+  @override
+  State<ChatBotMobile> createState() => _ChatBotMobileState();
+}
+
+class _ChatBotMobileState extends State<ChatBotMobile> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _controller = TextEditingController();
+  final List<Map<String, String>> _messages = [];
+
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
     _messages.add({'role': 'bot', 'text': 'As-salāmu ʿalaykum! You can ask me anything about Al-Aqsa Mosque. 🕌'});
   }
-
-  final TextEditingController _controller = TextEditingController();
-  final List<Map<String, String>> _messages =
-      []; // {'role': 'user'/'bot', 'text': '...'} // {'role': 'user'/'bot', 'text': '...'}
-  bool _isLoading = false;
 
   Future<void> _sendMessage() async {
     final text = _controller.text.trim();
@@ -33,11 +56,11 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
       _isLoading = true;
     });
 
-    // Scroll to the user's message before bot replies
-    await Future.delayed(Duration(milliseconds: 100));
+    // Scroll to user's message
+    await Future.delayed(const Duration(milliseconds: 100));
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
     );
 
@@ -96,9 +119,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ask about Al-Aqsa'),
-      ),
+      appBar: AppBar(title: const Text('Ask about Al-Aqsa')),
       body: Column(
         children: [
           Expanded(
