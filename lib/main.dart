@@ -11,9 +11,9 @@ import 'screens/info_screen.dart';
 import 'screens/settings_screen.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
 
-  WidgetsFlutterBinding.ensureInitialized();
   // Set preferred orientations for better mobile experience
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
