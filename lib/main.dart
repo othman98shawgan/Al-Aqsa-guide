@@ -1,4 +1,6 @@
 // main.dart
+import 'package:alaqsa_visitor_guide/screens/chatbot_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:alaqsa_visitor_guide/screens/map_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,7 +10,9 @@ import 'screens/highlights_screen.dart';
 import 'screens/info_screen.dart';
 import 'screens/settings_screen.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
+
   WidgetsFlutterBinding.ensureInitialized();
   // Set preferred orientations for better mobile experience
   SystemChrome.setPreferredOrientations([
@@ -87,7 +91,8 @@ class _MainScreenState extends State<MainScreen> {
     ToursScreen(),
     MapScreen(),
     InfoScreen(),
-    SettingsScreen(),
+    // SettingsScreen(),
+    ChatBotScreen()
   ];
 
   @override
@@ -179,8 +184,8 @@ class _MainScreenState extends State<MainScreen> {
                 label: 'Info',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Settings',
+                icon: Icon(Icons.chat),
+                label: 'ChatBot',
               ),
             ],
           ),
