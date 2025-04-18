@@ -4,8 +4,15 @@ import 'landmark_detail_screen.dart';
 import '../widgets/landmark_dialog.dart';
 import '../data/landmarks_data.dart';
 
-class MapScreen extends StatelessWidget {
-  final List<Landmark> landmarks = landmarkData
+class MapScreen extends StatefulWidget {
+  const MapScreen({super.key});
+
+  @override
+  State<MapScreen> createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
+  final List<Landmark> allLandmarks = landmarkData
       .map((data) => Landmark(
             id: data['id'],
             name: data['name'],
@@ -17,6 +24,23 @@ class MapScreen extends StatelessWidget {
             type: data['type'],
           ))
       .toList();
+
+  final Map<String, bool> filters = {
+    'Mosque': true,
+    'Dome': true,
+    'Gate': true,
+    'Building': true,
+  };
+
+  bool showFilterOptions = false;
+
+  void toggleFilter(String type) {
+    setState(() {
+      filters[type] = !(filters[type] ?? true);
+    });
+  }
+
+  List<Landmark> get filteredLandmarks => allLandmarks.where((lm) => filters[lm.type] == true).toList();
 
   void _openLandmarkDialog(BuildContext context, Landmark landmark) async {
     final result = await showDialog<bool>(
@@ -54,12 +78,55 @@ class MapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double mapWidth = 566;
+    const double mapHeight = 800;
+
     return Scaffold(
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          if (showFilterOptions)
+            ...filters.keys.map((type) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(right: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+                        ),
+                        child: Text(
+                          type,
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ),
+                      FloatingActionButton.small(
+                        heroTag: 'filter_$type',
+                        backgroundColor: filters[type]! ? _getColorByType(type) : Colors.grey,
+                        onPressed: () => toggleFilter(type),
+                        tooltip: type,
+                        child: Icon(
+                          filters[type]! ? Icons.check : Icons.close,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+          FloatingActionButton(
+            heroTag: 'main_filter_toggle',
+            onPressed: () => setState(() => showFilterOptions = !showFilterOptions),
+            child: Icon(showFilterOptions ? Icons.close : Icons.filter_list),
+          ),
+        ],
+      ),
       body: LayoutBuilder(
         builder: (context, constraints) {
-          double mapWidth = 566;
-          double mapHeight = 800;
-
           return InteractiveViewer(
             minScale: 1,
             maxScale: 4,
@@ -71,7 +138,7 @@ class MapScreen extends StatelessWidget {
                   width: constraints.maxWidth,
                   height: constraints.maxHeight,
                 ),
-                ...landmarks.map((lm) {
+                ...filteredLandmarks.map((lm) {
                   double x = (lm.left / mapWidth) * constraints.maxWidth;
                   double y = (lm.top / mapHeight) * constraints.maxHeight;
 
