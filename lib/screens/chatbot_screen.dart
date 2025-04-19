@@ -3,7 +3,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ChatBotScreen extends StatefulWidget {
-  const ChatBotScreen({super.key});
+  final String? initialQuestion;
+
+  const ChatBotScreen({super.key, this.initialQuestion});
 
   @override
   State<ChatBotScreen> createState() => _ChatBotScreenState();
@@ -20,6 +22,40 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
   void initState() {
     super.initState();
     _messages.add({'role': 'bot', 'text': 'As-salāmu ʿalaykum! You can ask me anything about Al-Aqsa Mosque. 🕌'});
+
+    if (widget.initialQuestion != null && widget.initialQuestion!.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _sendInitial(widget.initialQuestion!);
+      });
+    }
+  }
+
+  Future<String> _askOpenAI(String question) async {
+    final response = await http.post(
+      Uri.parse('https://chatbot-vkltqnycea-uc.a.run.app'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'question': question}),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data['answer'] ?? 'No answer received.';
+    } else {
+      return 'Failed to get a response from the server.';
+    }
+  }
+
+  Future<void> _sendInitial(String question) async {
+    setState(() {
+      _messages.add({'role': 'user', 'text': question});
+      _isLoading = true;
+    });
+
+    final reply = await _askOpenAI(question);
+    setState(() {
+      _messages.add({'role': 'bot', 'text': reply});
+      _isLoading = false;
+    });
   }
 
   Future<void> _sendMessage() async {
@@ -39,32 +75,11 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
       curve: Curves.easeOut,
     );
 
-    try {
-      final response = await http.post(
-        Uri.parse('https://chatbot-vkltqnycea-uc.a.run.app'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'question': text}),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        setState(() {
-          _messages.add({'role': 'bot', 'text': data['answer'] ?? 'No answer received.'});
-        });
-      } else {
-        setState(() {
-          _messages.add({'role': 'bot', 'text': 'Failed to get a response from the server.'});
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _messages.add({'role': 'bot', 'text': 'An error occurred. Please try again.'});
-      });
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    final reply = await _askOpenAI(text);
+    setState(() {
+      _messages.add({'role': 'bot', 'text': reply});
+      _isLoading = false;
+    });
   }
 
   @override
