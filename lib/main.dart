@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'screens/home_screen.dart';
 import 'screens/tours_screen.dart';
 import 'screens/highlights_screen.dart';
-import 'screens/info_screen.dart';
 import 'screens/settings_screen.dart';
 
 void main() async {
@@ -89,9 +88,8 @@ class _MainScreenState extends State<MainScreen> {
     HomeScreen(),
     ToursScreen(),
     MapScreen(),
-    // InfoScreen(),
     ChatBotScreen(),
-    SettingsScreen()
+    SettingsScreen(),
   ];
 
   @override
@@ -181,8 +179,8 @@ class _MainScreenState extends State<MainScreen> {
                 label: 'Map',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.chat),
-                label: 'ChatBot',
+                icon: Icon(Icons.smart_toy_outlined),
+                label: 'AI Chat',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.settings),
