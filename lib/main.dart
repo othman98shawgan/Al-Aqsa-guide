@@ -1,5 +1,6 @@
 // main.dart
 import 'package:alaqsa_visitor_guide/screens/chatbot_screen.dart';
+import 'package:alaqsa_visitor_guide/screens/tours_guides_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:alaqsa_visitor_guide/screens/map_screen.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,11 @@ import 'screens/home_screen.dart';
 import 'screens/tours_screen.dart';
 import 'screens/highlights_screen.dart';
 import 'screens/settings_screen.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
+  await initializeDateFormatting('en', null); // או 'en', תלוי בשפה
   WidgetsFlutterBinding.ensureInitialized();
 
   // Set preferred orientations for better mobile experience
@@ -86,7 +90,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _screens = [
     HomeScreen(),
-    ToursScreen(),
+    ToursGuidesScreen(),
     MapScreen(),
     ChatBotScreen(),
     SettingsScreen(),
@@ -153,10 +157,12 @@ class _MainScreenState extends State<MainScreen> {
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             selectedItemColor: Theme.of(context).colorScheme.secondary,
-            unselectedItemColor: Colors.white.withOpacity(0.9), // Better contrast
+            unselectedItemColor:
+                Colors.white.withOpacity(0.7), // Better contrast
             backgroundColor: Theme.of(context).primaryColor,
             currentIndex: _selectedIndex,
-            selectedFontSize: 12, // Smaller font for better layout on small screens
+            selectedFontSize:
+                12, // Smaller font for better layout on small screens
             unselectedFontSize: 12,
             iconSize: 24, // Consistent icon size
             elevation: 8, // Add elevation for depth
