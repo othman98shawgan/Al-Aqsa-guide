@@ -21,7 +21,25 @@ class LandmarkDetailScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            Image.asset(landmark.imagePath),
+            SizedBox(
+              height: 200,
+              child: PageView.builder(
+                itemCount: landmark.imagePaths.length,
+                controller: PageController(viewportFraction: 0.9),
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.asset(
+                        landmark.imagePaths[index],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
             const SizedBox(height: 10),
             Text(
               landmark.longDescription,

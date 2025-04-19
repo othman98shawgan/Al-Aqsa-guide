@@ -18,7 +18,7 @@ class _MapScreenState extends State<MapScreen> {
             name: data['name'],
             shortDescription: data['shortDescription'],
             longDescription: data['longDescription'],
-            imagePath: data['imagePath'],
+            imagePaths: data['imagePaths'],
             top: data['top'].toDouble(),
             left: data['left'].toDouble(),
             type: data['type'],
