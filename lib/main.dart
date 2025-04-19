@@ -89,9 +89,9 @@ class _MainScreenState extends State<MainScreen> {
     HomeScreen(),
     ToursScreen(),
     MapScreen(),
-    InfoScreen(),
-    // SettingsScreen(),
-    ChatBotScreen()
+    // InfoScreen(),
+    ChatBotScreen(),
+    SettingsScreen()
   ];
 
   @override
@@ -103,6 +103,7 @@ class _MainScreenState extends State<MainScreen> {
           title: const Text(
             'Al-Aqsa Mosque Guide',
             style: TextStyle(
+              color: Colors.white,
               fontSize: 18, // Smaller text for better fit on small devices
               fontWeight: FontWeight.bold,
             ),
@@ -114,6 +115,7 @@ class _MainScreenState extends State<MainScreen> {
             // Add a help button in the app bar
             IconButton(
               icon: const Icon(Icons.help_outline),
+              color: Colors.white,
               onPressed: () {
                 // Show help dialog
                 showDialog(
@@ -153,7 +155,7 @@ class _MainScreenState extends State<MainScreen> {
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             selectedItemColor: Theme.of(context).colorScheme.secondary,
-            unselectedItemColor: Colors.white.withOpacity(0.7), // Better contrast
+            unselectedItemColor: Colors.white.withOpacity(0.9), // Better contrast
             backgroundColor: Theme.of(context).primaryColor,
             currentIndex: _selectedIndex,
             selectedFontSize: 12, // Smaller font for better layout on small screens
@@ -179,12 +181,12 @@ class _MainScreenState extends State<MainScreen> {
                 label: 'Map',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.info),
-                label: 'Info',
-              ),
-              BottomNavigationBarItem(
                 icon: Icon(Icons.chat),
                 label: 'ChatBot',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.settings),
+                label: 'Settings',
               ),
             ],
           ),
