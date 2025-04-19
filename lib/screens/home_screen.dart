@@ -1,5 +1,6 @@
 //screens/home_screen.dart
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../widgets/info_card.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,7 +15,7 @@ class HomeScreen extends StatelessWidget {
               height: 200,
               width: double.infinity,
               color: Theme.of(context).primaryColor,
-              child: Center(
+              child: const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -28,7 +29,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         'Explore one of Islam\'s most sacred sites located in the heart of Jerusalem\'s Old City',
                         textAlign: TextAlign.center,
@@ -45,15 +46,15 @@ class HomeScreen extends StatelessWidget {
           ),
           InfoCard(
             title: 'About Al-Aqsa Mosque',
-            content: Column(
+            content: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Al-Aqsa Mosque, also known as Masjid al-Aqsa or "the Farthest Mosque," is located in the Old City of Jerusalem. It is the third holiest site in Islam after Masjid al-Haram in Mecca and Masjid an-Nabawi in Medina. The entire complex is referred to as Al-Haram ash-Sharif (The Noble Sanctuary) and includes the Dome of the Rock, prayer spaces, and other important Islamic structures.',
+                  'Al-Aqsa Mosque is Islam’s third holiest site, located in Jerusalem’s Old City. It was the first Qibla for Muslims and the site of the Prophet Muhammad’s (peace be upon him) ascension during Al-Isra wal-Mi\'raj.',
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'The mosque stands on the Temple Mount, a site of tremendous religious significance to Muslims, Jews, and Christians alike. For Muslims, it is the place from which Prophet Muhammad (peace be upon him) is believed to have ascended to heaven during the Night Journey (Isra and Mi\'raj).',
+                  'The mosque holds deep spiritual value, and praying there is considered highly rewarding in Islam.',
                 ),
               ],
             ),
@@ -63,14 +64,61 @@ class HomeScreen extends StatelessWidget {
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _visitInfoItem(context, 'Opening Hours',
-                    'Sunday - Thursday: 7:30 AM - 11:30 AM, 1:30 PM - 2:30 PM\nFriday: Open for Muslim prayer only\nSaturday: Closed\nNote: Hours may vary during Islamic holidays and Ramadan'),
-                Divider(),
+                _visitInfoItem(context, 'Location', 'Al-Aqsa Mosque Complex\nHaram al-Sharif\nOld City, Jerusalem'),
+                const Divider(),
                 _visitInfoItem(
-                    context, 'Location', 'Al-Aqsa Mosque Complex\nTemple Mount/Haram al-Sharif\nOld City, Jerusalem'),
-                Divider(),
-                _visitInfoItem(context, 'Entrance',
-                    'Non-Muslims: Enter through the Moroccan Gate (Mughrabi Gate)\nMuslims: Can enter through multiple gates\nVisitors should check current entry requirements before visiting'),
+                  context,
+                  'Parking 1 (9:00 - 17:00)',
+                  'Closest to the southern gate.',
+                  wazeUrl: 'https://waze.com/ul?ll=31.7767,35.2345&navigate=yes',
+                ),
+                _visitInfoItem(
+                  context,
+                  'Parking 2 (7:00 - 20:00)',
+                  'Good for early access.',
+                  wazeUrl: 'https://waze.com/ul?ll=31.7777,35.2365&navigate=yes',
+                ),
+                _visitInfoItem(
+                  context,
+                  'Parking 3 (24hrs)',
+                  'Open all day and night.',
+                  wazeUrl: 'https://waze.com/ul?ll=31.7788,35.2373&navigate=yes',
+                ),
+              ],
+            ),
+          ),
+          InfoCard(
+            title: 'Etiquette & Dress Code',
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _etiquetteItem('Modest Dress',
+                    'All visitors must dress modestly. For men, long pants and shirts with sleeves are required. For women, long skirts or pants, long-sleeved shirts, and head coverings are necessary.'),
+                _etiquetteItem('Footwear',
+                    'Shoes must be removed before entering prayer areas. Bring socks if you prefer not to walk barefoot.'),
+                _etiquetteItem('Behavior',
+                    'Maintain a quiet, respectful demeanor. Photography is restricted in certain areas. Follow guidance from staff.'),
+                _etiquetteItem('Prayer Times',
+                    'Non-Muslim visitors should be aware that access is restricted during prayer times.'),
+                _etiquetteItem('Physical Contact', 'Avoid physical contact between men and women who are not related.'),
+              ],
+            ),
+          ),
+          InfoCard(
+            title: 'Access & Security',
+            content: const Text(
+                'All visitors must pass through security checkpoints. Bring a valid ID or passport. Entry policies may change according to the political situation, so check current requirements before your visit. Some gates are only accessible to Muslims, while non-Muslims typically enter through the Moroccan Gate.'),
+          ),
+          InfoCard(
+            title: 'Facilities',
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _facilityItem('Ablution Areas', 'Available for ritual washing before prayers'),
+                _facilityItem('Restrooms', 'Located near entrance gates'),
+                _facilityItem('Water Fountains', 'Available throughout the complex'),
+                _facilityItem('Limited Seating', 'Primarily in shaded areas'),
+                _facilityItem('No Food Services', 'Eating is not permitted in most areas'),
               ],
             ),
           ),
@@ -79,21 +127,105 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _visitInfoItem(BuildContext context, String title, String details) {
+  Widget _visitInfoItem(BuildContext context, String title, String details, {String? wazeUrl}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).primaryColor,
-          ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+            ),
+            if (wazeUrl != null)
+              Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(30),
+                  onTap: () async {
+                    final wazeUrlParsed = Uri.parse(wazeUrl);
+                    await launchUrl(wazeUrlParsed, mode: LaunchMode.externalApplication);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ClipOval(
+                      child: Image.asset(
+                        'assets/images/waze_icon.png',
+                        height: 24,
+                        width: 24,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 4),
         Text(details),
+        const SizedBox(height: 10),
       ],
+    );
+  }
+
+  Widget _etiquetteItem(String title, String description) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(Icons.check_circle, color: Color(0xFF2C7D56), size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(description),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _facilityItem(String title, String description) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(Icons.arrow_right, color: Color(0xFF2C7D56), size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: '$title: ',
+                    style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF333333)),
+                  ),
+                  TextSpan(
+                    text: description,
+                    style: const TextStyle(color: Color(0xFF333333)),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -20,7 +20,7 @@ dependencies:
   http: ^0.13.6
   booking_calendar: ^1.1.10
   font_awesome_flutter: ^10.7.0 # or latest version
-
+  url_launcher: ^6.2.5
 
 dev_dependencies:
   flutter_test:

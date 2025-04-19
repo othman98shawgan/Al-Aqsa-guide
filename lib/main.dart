@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'screens/home_screen.dart';
 import 'screens/tours_screen.dart';
 import 'screens/highlights_screen.dart';
-import 'screens/info_screen.dart';
 import 'screens/settings_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -93,9 +92,8 @@ class _MainScreenState extends State<MainScreen> {
     HomeScreen(),
     ToursGuidesScreen(),
     MapScreen(),
-    InfoScreen(),
-    // SettingsScreen(),
-    ChatBotScreen()
+    ChatBotScreen(),
+    SettingsScreen(),
   ];
 
   @override
@@ -107,6 +105,7 @@ class _MainScreenState extends State<MainScreen> {
           title: const Text(
             'Al-Aqsa Mosque Guide',
             style: TextStyle(
+              color: Colors.white,
               fontSize: 18, // Smaller text for better fit on small devices
               fontWeight: FontWeight.bold,
             ),
@@ -118,6 +117,7 @@ class _MainScreenState extends State<MainScreen> {
             // Add a help button in the app bar
             IconButton(
               icon: const Icon(Icons.help_outline),
+              color: Colors.white,
               onPressed: () {
                 // Show help dialog
                 showDialog(
@@ -185,12 +185,12 @@ class _MainScreenState extends State<MainScreen> {
                 label: 'Map',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.info),
-                label: 'Info',
+                icon: Icon(Icons.smart_toy_outlined),
+                label: 'AI Chat',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.chat),
-                label: 'ChatBot',
+                icon: Icon(Icons.settings),
+                label: 'Settings',
               ),
             ],
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/landmark.dart';
+import 'chatbot_screen.dart';
 
 class LandmarkDetailScreen extends StatelessWidget {
   final Landmark landmark;
@@ -20,14 +21,45 @@ class LandmarkDetailScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            Image.asset(landmark.imagePath),
-            SizedBox(height: 10),
+            SizedBox(
+              height: 200,
+              child: PageView.builder(
+                itemCount: landmark.imagePaths.length,
+                controller: PageController(viewportFraction: 0.9),
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.asset(
+                        landmark.imagePaths[index],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 10),
             Text(
               landmark.longDescription,
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(Icons.chat),
+        label: Text('Ask About ' '${landmark.name}'),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => ChatBotScreen(
+                initialQuestion: 'Tell me a little bit about ${landmark.name}',
+              ),
+            ),
+          );
+        },
       ),
     );
   }

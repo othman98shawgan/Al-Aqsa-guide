@@ -212,24 +212,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _buildSettingCard(
               title: 'Language',
               children: [
-                // Add search bar for languages
-                Padding(
-                  padding: EdgeInsets.all(16),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search languages',
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                          color: Colors.grey.shade300,
-                        ),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                    ),
-                  ),
-                ),
-                Divider(),
                 _buildLanguageOption('English'),
                 _buildLanguageOption('Arabic'),
                 _buildLanguageOption('Turkish'),
