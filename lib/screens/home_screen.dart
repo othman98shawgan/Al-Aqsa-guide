@@ -1,9 +1,14 @@
 //screens/home_screen.dart
 import 'package:flutter/material.dart';
+import 'package:hijri/hijri_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/info_card.dart';
 
 class HomeScreen extends StatelessWidget {
+  final hijriDate = HijriCalendar.now().toFormat("dd MMMM yyyy");
+  final temperature = '22°C';
+  final lastVisit = 'Apr 18, 2025';
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -15,33 +20,81 @@ class HomeScreen extends StatelessWidget {
               height: 200,
               width: double.infinity,
               color: Theme.of(context).primaryColor,
-              child: const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/Al-buraq-logo-card2.png',
+                    height: 200,
+                    fit: BoxFit.contain,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          InfoCard(
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
                   children: [
-                    Text(
-                      'Welcome to Al-Aqsa Mosque',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                    const Icon(Icons.thermostat, size: 24, color: Color.fromARGB(255, 28, 135, 32)),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Temp',
+                      style: TextStyle(fontSize: 11, color: Colors.grey),
                     ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        'Explore one of Islam\'s most sacred sites located in the heart of Jerusalem\'s Old City',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
+                    const SizedBox(height: 4),
+                    Text(
+                      temperature,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
-              ),
+                const SizedBox(height: 24),
+                Column(
+                  children: [
+                    const Icon(Icons.calendar_today, size: 24, color: Color.fromARGB(255, 28, 135, 32)),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Hijri',
+                      style: TextStyle(fontSize: 11, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      hijriDate,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    const Icon(Icons.access_time_filled, size: 24, color: Color.fromARGB(255, 28, 135, 32)),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Last Visit',
+                      style: TextStyle(fontSize: 11, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      lastVisit,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                )
+              ],
             ),
           ),
           InfoCard(
@@ -98,16 +151,9 @@ class HomeScreen extends StatelessWidget {
                     'Shoes must be removed before entering prayer areas. Bring socks if you prefer not to walk barefoot.'),
                 _etiquetteItem('Behavior',
                     'Maintain a quiet, respectful demeanor. Photography is restricted in certain areas. Follow guidance from staff.'),
-                _etiquetteItem('Prayer Times',
-                    'Non-Muslim visitors should be aware that access is restricted during prayer times.'),
                 _etiquetteItem('Physical Contact', 'Avoid physical contact between men and women who are not related.'),
               ],
             ),
-          ),
-          InfoCard(
-            title: 'Access & Security',
-            content: const Text(
-                'All visitors must pass through security checkpoints. Bring a valid ID or passport. Entry policies may change according to the political situation, so check current requirements before your visit. Some gates are only accessible to Muslims, while non-Muslims typically enter through the Moroccan Gate.'),
           ),
           InfoCard(
             title: 'Facilities',
