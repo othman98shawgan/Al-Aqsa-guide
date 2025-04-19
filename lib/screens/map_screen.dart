@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 import '../models/landmark.dart';
 import 'landmark_detail_screen.dart';
 import '../widgets/landmark_dialog.dart';
@@ -56,9 +57,22 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   List<Landmark> get filteredLandmarks => allLandmarks.where((lm) => filters[lm.type] == true).toList();
 
   void _openLandmarkDialog(BuildContext context, Landmark landmark) async {
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (_) => LandmarkDialog(landmark: landmark),
+    final result = await Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        barrierDismissible: true,
+        barrierColor: Colors.black.withOpacity(0.4),
+        pageBuilder: (_, __, ___) => GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+            child: GestureDetector(
+              onTap: () {}, // absorb tap
+              child: Center(child: LandmarkDialog(landmark: landmark)),
+            ),
+          ),
+        ),
+      ),
     );
 
     if (result == true) {
@@ -76,7 +90,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   Future<void> _handleLandmarkTap(BuildContext context, Landmark landmark, double x, double y) async {
     final matrix = Matrix4.identity();
-    final zoom = 2.0;
+    final zoom = 2.5;
     final size = MediaQuery.of(context).size;
     final dx = -(x * zoom - size.width / 2);
     final dy = -(y * zoom - size.height / 2);
