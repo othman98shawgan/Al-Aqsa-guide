@@ -21,7 +21,7 @@ class LandmarkDialog extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.asset(landmark.imagePath, height: 120, fit: BoxFit.cover),
+            child: Image.asset(landmark.imagePaths.first, height: 120, fit: BoxFit.cover),
           ),
           SizedBox(height: 12),
           Text(
