@@ -1,11 +1,14 @@
 // widgets/tour_card.dart
 import 'package:flutter/material.dart';
 import '../models/tour.dart';
+import 'package:booking_calendar/booking_calendar.dart';
+import '../models/booking_calendar.dart';
 
 class TourCard extends StatelessWidget {
   final Tour tour;
+  final bool virtual;
 
-  TourCard({required this.tour});
+  TourCard({required this.tour, required this.virtual});
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +47,18 @@ class TourCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
+                      color: virtual
+                          ? const Color.fromARGB(255, 131, 189, 216)
+                          : Theme.of(context).primaryColor,
                     ),
                   ),
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                    color: virtual
+                        ? const Color.fromARGB(255, 131, 189, 216)
+                        : Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -85,7 +92,13 @@ class TourCard extends StatelessWidget {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(Icons.place, size: 16, color: Theme.of(context).colorScheme.secondary),
+                              Icon(Icons.place,
+                                  size: 16,
+                                  color: virtual
+                                      ? const Color.fromARGB(255, 131, 189, 216)
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .secondary),
                               SizedBox(width: 5),
                               Expanded(child: Text(stop)),
                             ],
@@ -101,16 +114,37 @@ class TourCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
+                        color: virtual
+                            ? const Color.fromARGB(255, 131, 189, 216)
+                            : Theme.of(context).primaryColor,
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    BookingCalendarDemoApp(virtual: virtual)));
+                      },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.secondary,
-                        foregroundColor: Theme.of(context).textTheme.bodyLarge!.color,
+                        backgroundColor: virtual
+                            ? const Color.fromARGB(255, 131, 189, 216)
+                            : Theme.of(context).colorScheme.secondary,
+                        foregroundColor:
+                            Theme.of(context).textTheme.bodyLarge!.color,
                       ),
-                      child: Text('Book Now'),
+                      child: virtual
+                          ? Row(
+                              children: [
+                                Icon(Icons.video_camera_back),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text('Book Now'),
+                              ],
+                            )
+                          : Text('Book Now'),
                     ),
                   ],
                 ),
