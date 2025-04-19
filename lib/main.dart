@@ -157,12 +157,10 @@ class _MainScreenState extends State<MainScreen> {
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             selectedItemColor: Theme.of(context).colorScheme.secondary,
-            unselectedItemColor:
-                Colors.white.withOpacity(0.7), // Better contrast
+            unselectedItemColor: Colors.white.withOpacity(0.7), // Better contrast
             backgroundColor: Theme.of(context).primaryColor,
             currentIndex: _selectedIndex,
-            selectedFontSize:
-                12, // Smaller font for better layout on small screens
+            selectedFontSize: 12, // Smaller font for better layout on small screens
             unselectedFontSize: 12,
             iconSize: 24, // Consistent icon size
             elevation: 8, // Add elevation for depth
