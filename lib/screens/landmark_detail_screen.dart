@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/landmark.dart';
-import 'chatbot_screen.dart'; // 👈 make sure this is correct
+import 'chatbot_screen.dart';
 
 class LandmarkDetailScreen extends StatelessWidget {
   final Landmark landmark;
