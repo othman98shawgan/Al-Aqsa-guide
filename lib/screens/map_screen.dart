@@ -11,7 +11,7 @@ class MapScreen extends StatefulWidget {
   State<MapScreen> createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   final List<Landmark> allLandmarks = landmarkData
       .map((data) => Landmark(
             id: data['id'],
@@ -33,6 +33,19 @@ class _MapScreenState extends State<MapScreen> {
   };
 
   bool showFilterOptions = false;
+  late TransformationController _transformationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _transformationController = TransformationController();
+  }
+
+  @override
+  void dispose() {
+    _transformationController.dispose();
+    super.dispose();
+  }
 
   void toggleFilter(String type) {
     setState(() {
@@ -59,6 +72,41 @@ class _MapScreenState extends State<MapScreen> {
         _openLandmarkDialog(context, landmark);
       }
     }
+  }
+
+  Future<void> _handleLandmarkTap(BuildContext context, Landmark landmark, double x, double y) async {
+    final matrix = Matrix4.identity();
+    final zoom = 2.0;
+    final size = MediaQuery.of(context).size;
+    final dx = -(x * zoom - size.width / 2);
+    final dy = -(y * zoom - size.height / 2);
+
+    matrix.translate(dx, dy);
+    matrix.scale(zoom);
+
+    await _animateZoom(matrix);
+    await Future.delayed(const Duration(milliseconds: 150));
+
+    _openLandmarkDialog(context, landmark);
+  }
+
+  Future<void> _animateZoom(Matrix4 targetMatrix) async {
+    final controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    final animation = Matrix4Tween(
+      begin: _transformationController.value,
+      end: targetMatrix,
+    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
+
+    controller.addListener(() {
+      _transformationController.value = animation.value;
+    });
+
+    await controller.forward();
+    controller.dispose();
   }
 
   Color _getColorByType(String type) {
@@ -128,6 +176,7 @@ class _MapScreenState extends State<MapScreen> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           return InteractiveViewer(
+            transformationController: _transformationController,
             minScale: 1,
             maxScale: 4,
             child: Stack(
@@ -146,7 +195,7 @@ class _MapScreenState extends State<MapScreen> {
                     top: y,
                     left: x,
                     color: _getColorByType(lm.type ?? ''),
-                    onTap: () => _openLandmarkDialog(context, lm),
+                    onTap: () => _handleLandmarkTap(context, lm, x, y),
                   );
                 }),
               ],
