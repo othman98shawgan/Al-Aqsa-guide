@@ -27,7 +27,7 @@ const List<Map<String, dynamic>> landmarkData = [
       'assets/images/qibli_mosque1.jpg',
       'assets/images/qibli_mosque2.jpg',
       'assets/images/qibli_mosque3.jpg',
-    ],                             
+    ],
     'top': 560,
     'left': 210,
     'type': 'Mosque'
@@ -41,6 +41,20 @@ const List<Map<String, dynamic>> landmarkData = [
     'imagePaths': ['assets/images/al_marwani.jpg'],
     'top': 540,
     'left': 440,
+    'type': 'Mosque'
+  },
+
+  {
+    'id': 'gate_rahma',
+    'name': 'Bab al-Rahma (Gate of Mercy)',
+    'shortDescription': 'Eastern sealed gate overlooking the Mount of Olives.',
+    'longDescription':
+        'Bab al-Rahma (Gate of Mercy), also known as the Golden Gate, is one of the most iconic gates of the Al-Aqsa compound. It is located on the eastern wall, facing the Mount of Olives. Though sealed for centuries, it holds great historical and religious significance in Islamic tradition.\n\n❌ Not wheelchair accessible – sealed and not open for entry.',
+    'imagePaths': [
+      'assets/images/gate_rahma1.jpg',
+    ],
+    'top': 250,
+    'left': 460,
     'type': 'Mosque'
   },
 
@@ -107,7 +121,7 @@ const List<Map<String, dynamic>> landmarkData = [
     'name': 'Gate of the Tribes (Bab al-Asbat)',
     'shortDescription': 'Northern gate near the Dome of the Rock.',
     'longDescription':
-        'The Gate of the Tribes (Bab al-Asbat) is located at the northeastern corner of the Al-Aqsa Mosque compound and is historically used for access to residential areas around the site.',
+        'The Gate of the Tribes (Bab al-Asbat) is located at the northeastern corner of the Al-Aqsa Mosque compound and is historically used for access to residential areas around the site.\n✅ Wheelchair accessible',
     'imagePaths': [
       'assets/images/gate_tribes1.jpg',
       'assets/images/gate_tribes2.jpg',
@@ -115,6 +129,32 @@ const List<Map<String, dynamic>> landmarkData = [
     ],
     'top': 100,
     'left': 480,
+    'type': 'Gate'
+  },
+  {
+    'id': 'gate_chain',
+    'name': 'Chain Gate (Bab al-Silsilah)',
+    'shortDescription': 'Western gate close to the Dome of the Rock.',
+    'longDescription':
+        'The Chain Gate (Bab al-Silsilah) is one of the main entrances to the Al-Aqsa Mosque compound from the western side. It is frequently used by worshippers and provides direct access to the Dome of the Rock.\n\n⚠️ Not wheelchair accessible – stairs are present at the entrance.',
+    'imagePaths': [
+      'assets/images/gate_chain1.jpg',
+    ],
+    'top': 425,
+    'left': 45,
+    'type': 'Gate'
+  },
+  {
+    'id': 'gate_iron',
+    'name': 'Iron Gate (Bab al-Hadid)',
+    'shortDescription': 'Historic gate along the western wall.',
+    'longDescription':
+        'The Iron Gate (Bab al-Hadid) is located on the western wall of the Al-Aqsa compound. It is known for its iron reinforcement and serves as one of the key access points to the sacred site.\n\n✅ Wheelchair accessible – entrance is level with the pathway.',
+    'imagePaths': [
+      'assets/images/gate_iron1.jpg',
+    ],
+    'top': 270,
+    'left': 50,
     'type': 'Gate'
   },
 
